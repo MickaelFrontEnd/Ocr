@@ -30,8 +30,8 @@ public class Core {
     private Tesseract tesseract;
     private String tessdataPath = "tessdata";
     private String language = "fra";
-    private int pageSegMode = 1;
-    private boolean preserveSpace = true;
+    private int pageSegMode = 6;
+    private boolean preserveSpace = false;
     private int tableBreakerNumber = 2;
     private PositionProvider positionProvider;
 
@@ -167,7 +167,17 @@ public class Core {
     }
     
     public boolean containsNumberMoreThan(Element element, int number) throws GenericException {
-        return getNumberOfNumber(element) >= number;
+        return getNumberOfNumber(element) > number;
+    }
+
+    public Elements getNextSiblings(Element element) {
+        Elements elements = new Elements();
+        Element tmp = element.nextElementSibling();
+        while (tmp != null) {
+            elements.add(tmp);
+            tmp = tmp.nextElementSibling();
+        }
+        return elements;
     }
 
     // TODO: Trouver un moyen plus flexible de stopper la recherche des lignes
@@ -175,7 +185,7 @@ public class Core {
         Element tableHeader = getTableHeader(document);
         List<Element> result = new ArrayList<>();
         if(tableHeader != null) {
-            Elements rows = tableHeader.siblingElements();
+            Elements rows = getNextSiblings(tableHeader);
             for(Element row : rows) {
                 if(containsNumberMoreThan(row,getTableBreakerNumber())) result.add(row);
             }
@@ -222,6 +232,9 @@ public class Core {
             tableRow.setQuantity(tableHeader.getQuantity().getNearest(numbers));
             tableRow.setUnitPrice(tableHeader.getUnitPrice().getNearest(numbers));
             tableRow.setTotalPrice(tableHeader.getTotalPrice().getNearest(numbers));
+            if (tableHeader.getTva() != null) {
+                tableRow.setTva(tableHeader.getTva().getNearest(numbers));
+            }
             result.add(tableRow);
         }
         return result;
@@ -234,5 +247,13 @@ public class Core {
     public Table constructTable(Document document) throws Exception {
         TableHeader tableHeader = constructHeader(document);
         return new Table(tableHeader, constructRows(tableHeader, document));
+    }
+      
+    public static void main(String[] args) throws Exception,GenericException {
+        Core core = new Core();
+        System.out.println(core.generateHtml("3.pdf"));
+        Document document = core.generateDocument("3.pdf");
+        Table table = core.constructTable(document);
+        System.out.println(table.toJson());
     }
 }
