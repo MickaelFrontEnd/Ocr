@@ -11,13 +11,14 @@ package mg.bici.ocr.core;
  */
 public class Dictionnary {
     
-    public static final String QUANTITY_LABEL = "Quantité";
-    public static final String UNIT_PRICE_LABEL = "Prix unitaire";
-    public static final String TOTAL_PRICE_LABEL = "Prix total";
-    public static final String TVA_LABEL = "Tva";
-    public static final String DESIGNATION_LABEL = "Désignation";
+    public static final String QUANTITY_LABEL = "quantite";
+    public static final String UNIT_PRICE_LABEL = "prix_unitaire";
+    public static final String TOTAL_PRICE_LABEL = "prix_total";
+    public static final String TVA_LABEL = "tva";
+    public static final String DESIGNATION_LABEL = "designation";
+    public static final String DISCOUNT_LABEL = "remise";
     
-    // TODOS: Les valeurs suivantes doivent êtres lues à partir d'un fichier
+    // TODO: Les valeurs suivantes doivent êtres lues à partir d'un fichier
     
     public static String[] getDesignation() {
         return new String[] {"désignation","designation"};
