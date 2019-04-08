@@ -44,7 +44,7 @@ public class WordPosition {
     
     public void setX2(String X2) throws GenericException {
         try {
-            this.X1 = Integer.parseInt(X2);
+            this.X2 = Integer.parseInt(X2);
         }
         catch(NumberFormatException ex) {
             throw new GenericException("Nombre invalide");
@@ -61,7 +61,7 @@ public class WordPosition {
     
     public void setY1(String Y1) throws GenericException {
         try {
-            this.X1 = Integer.parseInt(Y1);
+            this.Y1 = Integer.parseInt(Y1);
         }
         catch(NumberFormatException ex) {
             throw new GenericException("Nombre invalide");
@@ -78,7 +78,7 @@ public class WordPosition {
     
     public void setY2(String Y2) throws GenericException {
         try {
-            this.X1 = Integer.parseInt(Y2);
+            this.Y2 = Integer.parseInt(Y2);
         }
         catch(NumberFormatException ex) {
             throw new GenericException("Nombre invalide");
@@ -94,6 +94,6 @@ public class WordPosition {
     
     @Override
     public String toString() {
-        return String.format("X1:{0}, X2:{1}, Y1:{2}, Y2:{3}",getX1(),getX2(),getY1(),getY2());
+        return String.format("X1:%s, X2:%s, Y1:%s, Y2:%s",getX1(),getX2(),getY1(),getY2());
     }
 }
