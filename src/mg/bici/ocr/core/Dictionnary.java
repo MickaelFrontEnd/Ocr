@@ -21,7 +21,7 @@ public class Dictionnary {
     // TODO: Les valeurs suivantes doivent êtres lues à partir d'un fichier
     
     public static String[] getDesignation() {
-        return new String[] {"désignation","designation"};
+        return new String[]{"désignation", "designation", "déscription", "description"};
     }
     
     public static String[] getPrice() {
@@ -50,5 +50,13 @@ public class Dictionnary {
     
     public static String[] getTva() {
         return new String[] {"tva"};
+    }
+
+    public static String[] getRate() {
+        return new String[]{"taux", "rate"};
+    }
+
+    public static String[] getTvaWordSeparator() {
+        return new String[]{"de"};
     }
 }
