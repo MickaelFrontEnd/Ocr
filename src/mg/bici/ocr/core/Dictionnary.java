@@ -10,5 +10,12 @@ package mg.bici.ocr.core;
  * @author Mickael
  */
 public class Dictionnary {
-    public static String[] DESIGNATION = {"Désignation","designation"};
+    
+    public static String[] getDesignation() {
+        return new String[] {"Désignation","Designation"};
+    }
+    
+    public static String[] getTotalPrice() {
+        return new String[] {"Prix total","Total price","Prixtotal","Prix_total"};
+    }
 }
