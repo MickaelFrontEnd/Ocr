@@ -73,7 +73,9 @@ public class PositionProvider {
     
     public List<WordPosition> getPosition(String[] words) throws Exception {
         for(String word:words) {
-            if((getPosition(word) != null)) return getPosition(word);
+            if ((getPosition(word) != null && (!getPosition(word).isEmpty()))) {
+                return getPosition(word);
+            }
         }
         return null;
     }
