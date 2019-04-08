@@ -24,7 +24,7 @@ public class Dictionnary {
     }
     
     public static String[] getPrice() {
-        return new String[] {"prix","price"};
+        return new String[]{"prix", "montant", "price"};
     }
     
     public static String[] getUnit() {
@@ -36,7 +36,7 @@ public class Dictionnary {
     }
     
     public static String[] getTotal() {
-        return new String[] {"total"};
+        return new String[]{"total", "montant"};
     }
     
     public static String[] getQuantity() {
