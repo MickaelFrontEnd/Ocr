@@ -51,6 +51,9 @@ public class Table {
             keyValue.put(Dictionnary.DESIGNATION_LABEL, row.getDesignation().getWord());
             keyValue.put(Dictionnary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
             keyValue.put(Dictionnary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
+            if (row.getTva() != null) {
+                keyValue.put(Dictionnary.TVA_LABEL, row.getTva().getNumber());
+            }
             result.add(keyValue);
         }
         return result;
@@ -67,6 +70,9 @@ public class Table {
             jsonRow.put(Dictionnary.QUANTITY_LABEL, row.getQuantity().getNumber());
             jsonRow.put(Dictionnary.DESIGNATION_LABEL, "");
             jsonRow.put(Dictionnary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
+            if (row.getTva() != null) {
+                jsonRow.put(Dictionnary.TVA_LABEL, row.getTva().getNumber());
+            }
             jsonArray.add(jsonRow);
         }
         json.put("facture", jsonArray);
