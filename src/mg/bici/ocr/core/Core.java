@@ -11,6 +11,7 @@ import java.util.List;
 import mg.bici.ocr.exception.GenericException;
 import mg.bici.ocr.model.LocalisableNumber;
 import mg.bici.ocr.model.LocalisableWord;
+import mg.bici.ocr.model.Table;
 import mg.bici.ocr.model.TableHeader;
 import mg.bici.ocr.model.TableRow;
 import mg.bici.ocr.model.WordPosition;
@@ -229,14 +230,9 @@ public class Core {
     public List<TableRow> constructRows(Document document) throws Exception {
         return constructRows(constructHeader(document), document);
     }
-      
-    public static void main(String[] args) throws Exception,GenericException {
-        Core core = new Core();
-        Document document = core.generateDocument("modele-de-facture.pdf");
-        List<TableRow> rows = core.constructRows(document);
-        for (TableRow row : rows) {
-            System.out.println(row);
-        }
 
+    public Table constructTable(Document document) throws Exception {
+        TableHeader tableHeader = constructHeader(document);
+        return new Table(tableHeader, constructRows(tableHeader, document));
     }
 }

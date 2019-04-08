@@ -31,4 +31,9 @@ public class Table {
         this.tableRow = tableRow;
     }
 
+    public Table(TableHeader tableHeader, List<TableRow> tableRow) {
+        this.tableHeader = tableHeader;
+        this.tableRow = tableRow;
+    }
+
 }
