@@ -29,6 +29,9 @@ public class LocalisableWord extends Localisable {
 
     // TODO: Généraliser dans la classe mère
     public LocalisableNumber getNearest(List<LocalisableNumber> localisables) {
+        if (this.getWordPosition() == null) {
+            return null;
+        }
         LocalisableNumber result = null;
         int gap = Integer.MAX_VALUE;
         for (LocalisableNumber localisable : localisables) {
