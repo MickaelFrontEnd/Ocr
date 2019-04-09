@@ -126,23 +126,6 @@ public class Core {
     public Document generateDocument(String path) throws Exception {
         return Jsoup.parse(generateHtml(path));
     }
-    
-    public Element getElement(Element element,String[] dictionnaries) {
-        Elements elements;
-        for(int i = 0; i < dictionnaries.length; i++){
-            elements = element.select(String.format("span:contains(%s)", dictionnaries[i]));
-            if(elements != null && elements.size() > 1) return elements.get(1);
-        }
-        return null;
-    }
-    
-    public Element getDesignation(Document document) {
-        return getElement(document,Dictionnary.getDesignation());
-    }
-    
-    public Element getTableHeader(Document document) {
-        return getDesignation(document).parent();
-    }
 
     // TODO: Doit supporter les entrées de type 20%,30$,100£,......
     public List<LocalisableNumber> extractNumber(Element element) {
@@ -170,24 +153,54 @@ public class Core {
         return getNumberOfNumber(element) > number;
     }
 
-    public Elements getNextSiblings(Element element) {
-        Elements elements = new Elements();
-        Element tmp = element.nextElementSibling();
-        while (tmp != null) {
-            elements.add(tmp);
-            tmp = tmp.nextElementSibling();
+    private LocalisableWord getDesignation(Element element) throws GenericException {
+        DomManipulator domManipulator = new DomManipulator(element);
+        Element designation = domManipulator.getElement(Dictionnary.getDesignation());
+        if (designation != null) {
+            LocalisableWord result = Converter.convertToLocalisableWord(designation);
+            domManipulator.setElement(designation);
+            Element prev = domManipulator.getPrev();
+            Element next = domManipulator.getNext();
+            if (prev != null) {
+                result.setPrev(Converter.convertToLocalisableWord(prev));
+            }
+            if (next != null) {
+                result.setNext(Converter.convertToLocalisableWord(next));
+            }
+            return result;
         }
-        return elements;
+        return null;
+    }
+
+    // TODO: Refactoriser code
+    public LocalisableWord getDesignation(TableHeader tableHeader, Element row) throws GenericException {
+        int begin = tableHeader.getDesignation().getPrev() != null
+                ? tableHeader.getDesignation().getPrev().getWordPosition().getX2()
+                : -1;
+        int end = tableHeader.getDesignation().getNext() != null
+                ? tableHeader.getDesignation().getNext().getWordPosition().getX1()
+                : Integer.MAX_VALUE;
+        DomManipulator domManipulator = new DomManipulator(row);
+        Elements elements = domManipulator.getElements(begin, end);
+        LocalisableWord result = new LocalisableWord();
+        result.setWord(Converter.convertToString(elements));
+        return result;
     }
 
     // TODO: Trouver un moyen plus flexible de stopper la recherche des lignes
     public List<Element> getTableRows(Document document) throws GenericException {
-        Element tableHeader = getTableHeader(document);
+        DomManipulator domManipulator = new DomManipulator(document);
+        Element tableHeader = domManipulator.getTableHeader(document);
         List<Element> result = new ArrayList<>();
-        if(tableHeader != null) {
-            Elements rows = getNextSiblings(tableHeader);
+        if (tableHeader != null) {
+            domManipulator.setElement(tableHeader);
+            Elements rows = domManipulator.getNextSiblings();
             for(Element row : rows) {
-                if(containsNumberMoreThan(row,getTableBreakerNumber())) result.add(row);
+                if (containsNumberMoreThan(row, getTableBreakerNumber())) {
+                    result.add(row);
+                } else {
+                    return result;
+                }
             }
         }
         return result;
@@ -202,20 +215,20 @@ public class Core {
     }
     
     public TableHeader constructHeader(Document document) throws Exception {
-        Element tableHeader = getTableHeader(document);
+        DomManipulator domManipulator = new DomManipulator(document);
+        Element tableHeader = domManipulator.getTableHeader(document);
         PositionProvider pr = new PositionProvider(tableHeader);
         
         WordPosition quantityPosition = pr.getQuantityPosition();
         WordPosition unitPricePosition = pr.getUnitPricePosition();
         WordPosition totalPricePosition = pr.getTotalPricePosition();
         WordPosition tvaPosition = pr.getTvaPosition();
-        WordPosition designationPosition = pr.getDesignationPosition();
         
         LocalisableWord quantity = new LocalisableWord(Dictionnary.QUANTITY_LABEL,quantityPosition);
         LocalisableWord unitPrice = new LocalisableWord(Dictionnary.UNIT_PRICE_LABEL,unitPricePosition);
         LocalisableWord totalPrice = new LocalisableWord(Dictionnary.TOTAL_PRICE_LABEL,totalPricePosition);
         LocalisableWord tva = new LocalisableWord(Dictionnary.TVA_LABEL, tvaPosition);
-        LocalisableWord designation = new LocalisableWord(Dictionnary.DESIGNATION_LABEL, designationPosition);
+        LocalisableWord designation = getDesignation(tableHeader);
         
         return new TableHeader(quantity,designation,unitPrice,totalPrice,tva);
     }
@@ -232,6 +245,7 @@ public class Core {
             tableRow.setQuantity(tableHeader.getQuantity().getNearest(numbers));
             tableRow.setUnitPrice(tableHeader.getUnitPrice().getNearest(numbers));
             tableRow.setTotalPrice(tableHeader.getTotalPrice().getNearest(numbers));
+            tableRow.setDesignation(getDesignation(tableHeader, row));
             if (tableHeader.getTva() != null) {
                 tableRow.setTva(tableHeader.getTva().getNearest(numbers));
             }
@@ -251,8 +265,8 @@ public class Core {
       
     public static void main(String[] args) throws Exception,GenericException {
         Core core = new Core();
-        System.out.println(core.generateHtml("3.pdf"));
-        Document document = core.generateDocument("3.pdf");
+        //System.out.println(core.generateHtml("success/modele-facture-freelance.pdf"));
+        Document document = core.generateDocument("success/modele-de-facture.pdf");
         Table table = core.constructTable(document);
         System.out.println(table.toJson());
     }

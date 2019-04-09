@@ -68,7 +68,7 @@ public class Table {
             jsonRow = new JSONObject();
             jsonRow.put(Dictionnary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
             jsonRow.put(Dictionnary.QUANTITY_LABEL, row.getQuantity().getNumber());
-            jsonRow.put(Dictionnary.DESIGNATION_LABEL, "");
+            jsonRow.put(Dictionnary.DESIGNATION_LABEL, row.getDesignation().getWord());
             jsonRow.put(Dictionnary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
             if (row.getTva() != null) {
                 jsonRow.put(Dictionnary.TVA_LABEL, row.getTva().getNumber());

@@ -32,16 +32,7 @@ public class PositionProvider {
     public PositionProvider(Element element) {
         this.setElement(element);
     }
-    
-    public Elements getElement(String[] words) {
-        Elements elements;
-        for(int i = 0; i < words.length; i++){
-            elements = getElement().select(String.format("span:contains(%s)",words[i]));
-            if(elements != null) return elements;
-        }
-        return null;
-    }
-    
+
     // textContainingPosition a pour format bbox 1292 1060 1377 1132; x_wconf 63
     public static WordPosition getWordPosition(String textContainingPosition) throws GenericException {
         String bbox = textContainingPosition.split(";")[0];
@@ -106,8 +97,11 @@ public class PositionProvider {
     // TODO: Optimisation code
     public WordPosition getUnitPricePosition() throws Exception {
         WordPosition result = getFirstPosition(Dictionnary.getUnitPrice()[0]);
-        if(result != null) return result; // Dans le cas où le header contient directement pu
-        Elements elements = getElement(Dictionnary.getPrice());
+        if (result != null) {
+            return result; // Dans le cas où le header contient directement pu
+        }
+        DomManipulator domManipulator = new DomManipulator(getElement());
+        Elements elements = domManipulator.getElements(Dictionnary.getPrice());
         Element unit = null;
         Element ht = null;
         // A OPTIMISER
@@ -134,7 +128,8 @@ public class PositionProvider {
     
     // TODO: Optimisation code
     public WordPosition getTotalPricePosition() throws Exception {
-        Elements elements = getElement(Dictionnary.getPrice());
+        DomManipulator domManipulator = new DomManipulator(getElement());
+        Elements elements = domManipulator.getElements(Dictionnary.getPrice());
         Element total = null;
         Element ht = null;
         // A OPTIMISER
