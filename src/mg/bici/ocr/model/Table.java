@@ -44,7 +44,7 @@ public class Table {
 
     public List<Map<String, Object>> toKeyValue() {
         List<Map<String, Object>> result = new ArrayList();
-        Map<String, Object> keyValue = null;
+        Map<String, Object> keyValue;
         for (TableRow row : getTableRow()) {
             keyValue = new HashMap();
             keyValue.put(Dictionnary.QUANTITY_LABEL, row.getQuantity().getNumber());
@@ -62,7 +62,7 @@ public class Table {
     public String toJson() {
         JSONObject json = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        JSONObject jsonRow = null;
+        JSONObject jsonRow;
         List<TableRow> rows = getTableRow();
         for (TableRow row : rows) {
             jsonRow = new JSONObject();

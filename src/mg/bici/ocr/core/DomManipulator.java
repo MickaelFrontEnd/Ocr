@@ -40,8 +40,8 @@ public class DomManipulator {
 
     public Element getElement(String[] dictionnaries) {
         Elements elements;
-        for (int i = 0; i < dictionnaries.length; i++) {
-            elements = getElement().select(String.format("span:contains(%s)", dictionnaries[i]));
+        for (String dictionnarie : dictionnaries) {
+            elements = getElement().select(String.format("span:contains(%s)", dictionnarie));
             if (elements != null && elements.size() > 1) {
                 return elements.get(1);
             }
@@ -51,8 +51,8 @@ public class DomManipulator {
 
     public Elements getElements(String[] words) {
         Elements elements;
-        for (int i = 0; i < words.length; i++) {
-            elements = getElement().select(String.format("span:contains(%s)", words[i]));
+        for (String word : words) {
+            elements = getElement().select(String.format("span:contains(%s)", word));
             if (elements != null) {
                 return elements;
             }
@@ -81,11 +81,11 @@ public class DomManipulator {
     public Elements getElements(int begin, int end) throws GenericException {
         Elements result = new Elements();
         Elements elements = getElement().children();
-        WordPosition temp = null;
-        for (Element element : elements) {
-            temp = PositionProvider.getPosition(element);
+        WordPosition temp;
+        for (Element elem : elements) {
+            temp = PositionProvider.getPosition(elem);
             if (begin <= temp.getX1() && temp.getX2() <= end) {
-                result.add(element);
+                result.add(elem);
             }
         }
         return result;

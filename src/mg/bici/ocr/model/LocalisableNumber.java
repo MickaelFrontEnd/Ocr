@@ -45,9 +45,9 @@ public class LocalisableNumber extends Localisable {
     
     public static List<Double> getNumberOnly(List<LocalisableNumber> numbers) {
         List<Double> result = new ArrayList();
-        for(LocalisableNumber number:numbers) {
+        numbers.forEach((number) -> {
             result.add(number.getNumber());
-        }
+        });
         return result;
     }
 

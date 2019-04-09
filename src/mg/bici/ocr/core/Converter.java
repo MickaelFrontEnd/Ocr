@@ -26,10 +26,12 @@ public class Converter {
 
     public static String convertToString(Elements elements) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Element element : elements) {
+        elements.stream().map((element) -> {
             stringBuilder.append(element.text());
+            return element;
+        }).forEachOrdered((_item) -> {
             stringBuilder.append(" ");
-        }
+        });
         return stringBuilder.toString();
     }
 }
