@@ -132,15 +132,15 @@ public class Core {
         List<LocalisableNumber> result = new ArrayList();
         Elements childrens = element.children();
         if(!childrens.isEmpty()) {
-            for(Element children:childrens) {  
+            childrens.forEach((children) -> {
                 try {
                     result.add(new LocalisableNumber(
-                        children.text(),
-                        PositionProvider.getPosition(children)
+                            children.text(),
+                            PositionProvider.getPosition(children)
                     ));
                 }
                 catch(GenericException ex) {}
-            }
+            });
         }
         return result;
     }
@@ -236,9 +236,9 @@ public class Core {
     // TODOS: Inclure toute les colonnes possibles
     public List<TableRow> constructRows(TableHeader tableHeader, Document document) throws Exception {
         List<Element> rows = getTableRows(document);
-        List<LocalisableNumber> numbers = null;
+        List<LocalisableNumber> numbers;
         List<TableRow> result = new ArrayList();
-        TableRow tableRow = null;
+        TableRow tableRow;
         for (Element row : rows) {
             numbers = extractNumber(row);
             tableRow = new TableRow();
@@ -266,7 +266,7 @@ public class Core {
     public static void main(String[] args) throws Exception,GenericException {
         Core core = new Core();
         //System.out.println(core.generateHtml("success/modele-facture-freelance.pdf"));
-        Document document = core.generateDocument("success/modele-de-facture.pdf");
+        Document document = core.generateDocument("success/modele-facture-freelance.pdf");
         Table table = core.constructTable(document);
         System.out.println(table.toJson());
     }

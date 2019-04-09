@@ -56,8 +56,8 @@ public class PositionProvider {
     public List<WordPosition> getPosition(String word) throws Exception {
         Elements elements = getElement().select(String.format("span:containsOwn(%s)", word));
         List<WordPosition> result = new ArrayList();
-        for(Element element:elements) {
-            result.add(getWordPosition(element.attr("title")));
+        for (Element elem : elements) {
+            result.add(getWordPosition(elem.attr("title")));
         }
         return result;
     }
@@ -102,21 +102,21 @@ public class PositionProvider {
         }
         DomManipulator domManipulator = new DomManipulator(getElement());
         Elements elements = domManipulator.getElements(Dictionnary.getPrice());
-        Element unit = null;
-        Element ht = null;
+        Element unit;
+        Element ht;
         // A OPTIMISER
-        for(Element element:elements) {
-            unit = element.nextElementSibling();
+        for (Element elem : elements) {
+            unit = elem.nextElementSibling();
             if(containsWords(unit,Dictionnary.getUnit())) {
                 ht = unit.nextElementSibling();
                 if(containsWords(ht,Dictionnary.getHt())) {
-                    WordPosition pricePosition = getPosition(element);
+                    WordPosition pricePosition = getPosition(elem);
                     WordPosition htPosition = getPosition(ht);
                     pricePosition.setX2(htPosition.getX2());
                     return pricePosition;
                 }
                 else {
-                    WordPosition pricePosition = getPosition(element);
+                    WordPosition pricePosition = getPosition(elem);
                     WordPosition unitPosition = getPosition(unit);
                     pricePosition.setX2(unitPosition.getX2());
                     return pricePosition;
@@ -130,21 +130,21 @@ public class PositionProvider {
     public WordPosition getTotalPricePosition() throws Exception {
         DomManipulator domManipulator = new DomManipulator(getElement());
         Elements elements = domManipulator.getElements(Dictionnary.getPrice());
-        Element total = null;
-        Element ht = null;
+        Element total;
+        Element ht;
         // A OPTIMISER
-        for(Element element:elements) {
-            total = element.nextElementSibling();
+        for (Element elem : elements) {
+            total = elem.nextElementSibling();
             if(containsWords(total,Dictionnary.getTotal())) {
                 ht = total.nextElementSibling();
                 if(containsWords(ht,Dictionnary.getHt())) {
-                    WordPosition pricePosition = getPosition(element);
+                    WordPosition pricePosition = getPosition(elem);
                     WordPosition htPosition = getPosition(ht);
                     pricePosition.setX2(htPosition.getX2());
                     return pricePosition;
                 }
                 else {
-                    WordPosition pricePosition = getPosition(element);
+                    WordPosition pricePosition = getPosition(elem);
                     WordPosition unitPosition = getPosition(total);
                     pricePosition.setX2(unitPosition.getX2());
                     return pricePosition;
