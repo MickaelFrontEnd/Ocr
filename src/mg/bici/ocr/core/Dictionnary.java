@@ -5,58 +5,67 @@
  */
 package mg.bici.ocr.core;
 
+import mg.bici.ocr.config.ConfigurationAccessor;
+import mg.bici.ocr.config.FileConfigurationAccessor;
+
 /**
  *
  * @author Mickael
  */
 public class Dictionnary {
-    
+
+    private static final ConfigurationAccessor CONFIG = new FileConfigurationAccessor();
+
     public static final String QUANTITY_LABEL = "quantite";
     public static final String UNIT_PRICE_LABEL = "prix_unitaire";
     public static final String TOTAL_PRICE_LABEL = "prix_total";
     public static final String TVA_LABEL = "tva";
     public static final String DESIGNATION_LABEL = "designation";
     public static final String DISCOUNT_LABEL = "remise";
-    
-    // TODO: Les valeurs suivantes doivent êtres lues à partir d'un fichier
+    public static final String PRICE_LABEL = "prix";
+    public static final String UNIT_LABEL = "unitaire";
+    public static final String TOTAL_LABEL = "total";
+    public static final String HT_LABEL = "ht";
+    public static final String RATE_LABEL = "taux";
+    public static final String TVA_SEPARATOR_LABEL = "separateur_tva";
     
     public static String[] getDesignation() {
-        return new String[]{"désignation", "designation", "déscription", "description"};
+        return CONFIG.getDictionary(DESIGNATION_LABEL);
     }
     
     public static String[] getPrice() {
-        return new String[]{"prix", "montant", "price"};
+        return CONFIG.getDictionary(PRICE_LABEL);
     }
     
     public static String[] getUnit() {
-        return new String[] {"unitaire","unit"};
+        return CONFIG.getDictionary(UNIT_LABEL);
     }
     
     public static String[] getUnitPrice() {
-        return new String[] {"pu"};
+        return CONFIG.getDictionary(UNIT_PRICE_LABEL);
     }
     
     public static String[] getTotal() {
-        return new String[]{"total", "montant"};
+        return CONFIG.getDictionary(TOTAL_LABEL);
     }
     
     public static String[] getQuantity() {
-        return new String[] {"quantité","quantite","qté","qte","qt"};
+        return CONFIG.getDictionary(QUANTITY_LABEL);
     }
     
     public static String[] getHt() {
-        return new String[] {"ht"};
+        return CONFIG.getDictionary(HT_LABEL);
     }
     
     public static String[] getTva() {
-        return new String[] {"tva"};
+        return CONFIG.getDictionary(TVA_LABEL);
     }
 
     public static String[] getRate() {
-        return new String[]{"taux", "rate"};
+        return CONFIG.getDictionary(RATE_LABEL);
     }
 
     public static String[] getTvaWordSeparator() {
-        return new String[]{"de"};
+        return CONFIG.getDictionary(TVA_SEPARATOR_LABEL);
     }
 }

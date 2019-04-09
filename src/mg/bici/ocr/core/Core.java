@@ -262,12 +262,9 @@ public class Core {
         TableHeader tableHeader = constructHeader(document);
         return new Table(tableHeader, constructRows(tableHeader, document));
     }
-      
-    public static void main(String[] args) throws Exception,GenericException {
-        Core core = new Core();
-        //System.out.println(core.generateHtml("success/modele-facture-freelance.pdf"));
-        Document document = core.generateDocument("success/modele-facture-freelance.pdf");
-        Table table = core.constructTable(document);
-        System.out.println(table.toJson());
+
+    public Table constructTable(String path) throws Exception {
+        Document document = generateDocument(path);
+        return constructTable(document);
     }
 }
