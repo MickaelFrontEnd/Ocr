@@ -12,6 +12,8 @@ package mg.bici.ocr.model;
  */
 public class Localisable {
     private WordPosition wordPosition;
+    private Localisable prev;
+    private Localisable next;
 
     public WordPosition getWordPosition() {
         return wordPosition;
@@ -20,4 +22,21 @@ public class Localisable {
     public void setWordPosition(WordPosition wordPosition) {
         this.wordPosition = wordPosition;
     }
+
+    public Localisable getPrev() {
+        return prev;
+    }
+
+    public void setPrev(Localisable prev) {
+        this.prev = prev;
+    }
+
+    public Localisable getNext() {
+        return next;
+    }
+
+    public void setNext(Localisable next) {
+        this.next = next;
+    }
+
 }

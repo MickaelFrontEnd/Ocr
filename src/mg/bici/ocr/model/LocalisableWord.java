@@ -21,6 +21,9 @@ public class LocalisableWord extends Localisable {
     public void setWord(String word) {
         this.word = word;
     }
+
+    public LocalisableWord() {
+    }
     
     public LocalisableWord(String word,WordPosition wordPosition) {
         this.setWord(word);
