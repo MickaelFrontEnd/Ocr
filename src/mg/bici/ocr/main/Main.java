@@ -5,7 +5,6 @@
  */
 package mg.bici.ocr.main;
 
-import java.io.File;
 import mg.bici.ocr.core.Ocr;
 
 /**
@@ -15,7 +14,7 @@ import mg.bici.ocr.core.Ocr;
 public class Main {
     public static void main(String[] args) throws Exception {
         Ocr ocr = new Ocr();
-        System.out.println(ocr.getCore().getTesseract().doOCR(new File("success/modele-facture-freelance.pdf")));
-        System.out.println(ocr.getJSON("success/modele-facture-freelance.pdf"));
+        String plainText = ocr.getCore().generatePlainText("success/modele-facture-freelance.pdf");
+        //System.out.println(plainText.substring());
     }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import mg.bici.ocr.core.Dictionnary;
+import mg.bici.ocr.core.Dictionary;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -47,12 +47,12 @@ public class Table {
         Map<String, Object> keyValue;
         for (TableRow row : getTableRow()) {
             keyValue = new HashMap();
-            keyValue.put(Dictionnary.QUANTITY_LABEL, row.getQuantity().getNumber());
-            keyValue.put(Dictionnary.DESIGNATION_LABEL, row.getDesignation().getWord());
-            keyValue.put(Dictionnary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
-            keyValue.put(Dictionnary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
+            keyValue.put(Dictionary.QUANTITY_LABEL, row.getQuantity().getNumber());
+            keyValue.put(Dictionary.DESIGNATION_LABEL, row.getDesignation().getWord());
+            keyValue.put(Dictionary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
+            keyValue.put(Dictionary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
             if (row.getTva() != null) {
-                keyValue.put(Dictionnary.TVA_LABEL, row.getTva().getNumber());
+                keyValue.put(Dictionary.TVA_LABEL, row.getTva().getNumber());
             }
             result.add(keyValue);
         }
@@ -66,12 +66,12 @@ public class Table {
         List<TableRow> rows = getTableRow();
         for (TableRow row : rows) {
             jsonRow = new JSONObject();
-            jsonRow.put(Dictionnary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
-            jsonRow.put(Dictionnary.QUANTITY_LABEL, row.getQuantity().getNumber());
-            jsonRow.put(Dictionnary.DESIGNATION_LABEL, row.getDesignation().getWord());
-            jsonRow.put(Dictionnary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
+            jsonRow.put(Dictionary.TOTAL_PRICE_LABEL, row.getTotalPrice().getNumber());
+            jsonRow.put(Dictionary.QUANTITY_LABEL, row.getQuantity().getNumber());
+            jsonRow.put(Dictionary.DESIGNATION_LABEL, row.getDesignation().getWord());
+            jsonRow.put(Dictionary.UNIT_PRICE_LABEL, row.getUnitPrice().getNumber());
             if (row.getTva() != null) {
-                jsonRow.put(Dictionnary.TVA_LABEL, row.getTva().getNumber());
+                jsonRow.put(Dictionary.TVA_LABEL, row.getTva().getNumber());
             }
             jsonArray.add(jsonRow);
         }

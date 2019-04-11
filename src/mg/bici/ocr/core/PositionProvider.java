@@ -91,25 +91,25 @@ public class PositionProvider {
     }
     
     public WordPosition getQuantityPosition() throws Exception {
-        return getFirstPosition(Dictionnary.getQuantity());
+        return getFirstPosition(Dictionary.getQuantity());
     }
     
     // TODO: Optimisation code
     public WordPosition getUnitPricePosition() throws Exception {
-        WordPosition result = getFirstPosition(Dictionnary.getUnitPrice()[0]);
+        WordPosition result = getFirstPosition(Dictionary.getUnitPrice()[0]);
         if (result != null) {
             return result; // Dans le cas où le header contient directement pu
         }
         DomManipulator domManipulator = new DomManipulator(getElement());
-        Elements elements = domManipulator.getElements(Dictionnary.getPrice());
+        Elements elements = domManipulator.getElements(Dictionary.getPrice());
         Element unit;
         Element ht;
         // A OPTIMISER
         for (Element elem : elements) {
             unit = elem.nextElementSibling();
-            if(containsWords(unit,Dictionnary.getUnit())) {
+            if(containsWords(unit,Dictionary.getUnit())) {
                 ht = unit.nextElementSibling();
-                if(containsWords(ht,Dictionnary.getHt())) {
+                if(containsWords(ht,Dictionary.getHt())) {
                     WordPosition pricePosition = getPosition(elem);
                     WordPosition htPosition = getPosition(ht);
                     pricePosition.setX2(htPosition.getX2());
@@ -129,15 +129,15 @@ public class PositionProvider {
     // TODO: Optimisation code
     public WordPosition getTotalPricePosition() throws Exception {
         DomManipulator domManipulator = new DomManipulator(getElement());
-        Elements elements = domManipulator.getElements(Dictionnary.getPrice());
+        Elements elements = domManipulator.getElements(Dictionary.getPrice());
         Element total;
         Element ht;
         // A OPTIMISER
         for (Element elem : elements) {
             total = elem.nextElementSibling();
-            if(containsWords(total,Dictionnary.getTotal())) {
+            if(containsWords(total,Dictionary.getTotal())) {
                 ht = total.nextElementSibling();
-                if(containsWords(ht,Dictionnary.getHt())) {
+                if(containsWords(ht,Dictionary.getHt())) {
                     WordPosition pricePosition = getPosition(elem);
                     WordPosition htPosition = getPosition(ht);
                     pricePosition.setX2(htPosition.getX2());
@@ -151,15 +151,15 @@ public class PositionProvider {
                 }               
             }
         }
-        WordPosition result = getFirstPosition(Dictionnary.getTotal());
+        WordPosition result = getFirstPosition(Dictionary.getTotal());
         return result;
     }
     
     public WordPosition getTvaPosition() throws Exception {
-        return getFirstPosition(Dictionnary.getTva());
+        return getFirstPosition(Dictionary.getTva());
     }
     
     public WordPosition getDesignationPosition() throws Exception {
-        return getFirstPosition(Dictionnary.getDesignation());
+        return getFirstPosition(Dictionary.getDesignation());
     }
 }

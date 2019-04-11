@@ -5,6 +5,8 @@
  */
 package mg.bici.ocr.core;
 
+import java.util.List;
+import java.util.Map;
 import mg.bici.ocr.model.Table;
 
 /**
@@ -27,7 +29,17 @@ public class Ocr {
     }
 
     public String getJSON(String path) throws Exception {
-        Table table = core.constructTable(path);
+        Table table = getCore().constructTable(path);
         return table.toJson();
+    }
+
+    // Information générale
+    public Object getHeader(Class classe, Map<String, String> mapping) {
+        return null;
+    }
+
+    // Lignes factures
+    public List<Object> getRows(Class classe, Map<String, String> mapping) {
+        return null;
     }
 }

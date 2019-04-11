@@ -122,6 +122,12 @@ public class Core {
         this.getTesseract().setHocr(true);
         return this.getTesseract().doOCR(file);
     }
+
+    public String generatePlainText(String path) throws Exception {
+        File file = new File(path);
+        this.getTesseract().setHocr(false);
+        return this.getTesseract().doOCR(file);
+    }
     
     public Document generateDocument(String path) throws Exception {
         return Jsoup.parse(generateHtml(path));
@@ -155,7 +161,7 @@ public class Core {
 
     private LocalisableWord getDesignation(Element element) throws GenericException {
         DomManipulator domManipulator = new DomManipulator(element);
-        Element designation = domManipulator.getElement(Dictionnary.getDesignation());
+        Element designation = domManipulator.getElement(Dictionary.getDesignation());
         if (designation != null) {
             LocalisableWord result = Converter.convertToLocalisableWord(designation);
             domManipulator.setElement(designation);
@@ -224,10 +230,10 @@ public class Core {
         WordPosition totalPricePosition = pr.getTotalPricePosition();
         WordPosition tvaPosition = pr.getTvaPosition();
         
-        LocalisableWord quantity = new LocalisableWord(Dictionnary.QUANTITY_LABEL,quantityPosition);
-        LocalisableWord unitPrice = new LocalisableWord(Dictionnary.UNIT_PRICE_LABEL,unitPricePosition);
-        LocalisableWord totalPrice = new LocalisableWord(Dictionnary.TOTAL_PRICE_LABEL,totalPricePosition);
-        LocalisableWord tva = new LocalisableWord(Dictionnary.TVA_LABEL, tvaPosition);
+        LocalisableWord quantity = new LocalisableWord(Dictionary.QUANTITY_LABEL, quantityPosition);
+        LocalisableWord unitPrice = new LocalisableWord(Dictionary.UNIT_PRICE_LABEL, unitPricePosition);
+        LocalisableWord totalPrice = new LocalisableWord(Dictionary.TOTAL_PRICE_LABEL, totalPricePosition);
+        LocalisableWord tva = new LocalisableWord(Dictionary.TVA_LABEL, tvaPosition);
         LocalisableWord designation = getDesignation(tableHeader);
         
         return new TableHeader(quantity,designation,unitPrice,totalPrice,tva);
@@ -267,4 +273,5 @@ public class Core {
         Document document = generateDocument(path);
         return constructTable(document);
     }
+
 }
