@@ -26,7 +26,7 @@ public class FileConfigurationAccessor implements ConfigurationAccessor {
         try (InputStreamReader input = new InputStreamReader(getClass().getResourceAsStream(PATH), "UTF8")) {
             properties.load(input);
         } catch (Exception ex) {
-            ex.printStackTrace();
+
         }
     }
 
