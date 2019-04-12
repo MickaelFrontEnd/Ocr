@@ -29,6 +29,10 @@ public class Dictionary {
     public static final String RATE_LABEL = "taux";
     public static final String TVA_SEPARATOR_LABEL = "separateur_tva";
     public static final String BILL_NUMBER_LABEL = "numero_facture";
+    public static final String ISSUE_DATE_LABEL = "date_emission";
+    public static final String DUE_DATE_LABEL = "date_echeance";
+    public static final String HEADER = "en_tete";
+    public static final String BODY = "corps";
     
     public static String[] getDesignation() {
         return CONFIG.getDictionary(DESIGNATION_LABEL);
@@ -72,5 +76,13 @@ public class Dictionary {
 
     public static String[] getBillNumber() {
         return CONFIG.getDictionary(BILL_NUMBER_LABEL);
+    }
+
+    public static String[] getIssueDate() {
+        return CONFIG.getDictionary(ISSUE_DATE_LABEL);
+    }
+
+    public static String[] getDueDate() {
+        return CONFIG.getDictionary(DUE_DATE_LABEL);
     }
 }

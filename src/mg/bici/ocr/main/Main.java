@@ -5,7 +5,12 @@
  */
 package mg.bici.ocr.main;
 
+import java.util.HashMap;
+import java.util.Map;
+import mg.bici.ocr.core.Dictionary;
 import mg.bici.ocr.core.Ocr;
+import mg.bici.ocr.model.FactureFournisseur;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -14,7 +19,11 @@ import mg.bici.ocr.core.Ocr;
 public class Main {
     public static void main(String[] args) throws Exception {
         Ocr ocr = new Ocr();
-        String plainText = ocr.getCore().generatePlainText("success/modele-facture-freelance.pdf");
-        //System.out.println(plainText.substring());
+        JSONObject json = ocr.getJSONObject("success/2.pdf");
+        Map<String, String> mapping = new HashMap();
+        mapping.put(Dictionary.BILL_NUMBER_LABEL, "numFact");
+        mapping.put(Dictionary.ISSUE_DATE_LABEL, "dateEmission");
+        mapping.put(Dictionary.DUE_DATE_LABEL, "datyecheance");
+        FactureFournisseur facture = (FactureFournisseur) ocr.getHeader(json, FactureFournisseur.class, mapping);
     }
 }

@@ -31,22 +31,20 @@ public class StringProvider {
         StringBuilder stringBuilder = new StringBuilder();
         for (String text : texts) {
             stringBuilder.append("(");
-            stringBuilder.append(text);
+            stringBuilder.append(text.toLowerCase());
             stringBuilder.append(")|");
         }
         String result = stringBuilder.toString();
         return result.substring(0, result.lastIndexOf("|"));
     }
 
-    // TODO: Optimiser le code
     public String[] splitByLine() {
         return getPlainText().split("\\n", -1);
     }
 
     // TODO: Optimiser le code
-    public String getPartialString(String[] texts) {
+    public String getPartialString(String[] lines, String[] texts) {
         Pattern pattern = Pattern.compile(getPattern(texts));
-        String[] lines = splitByLine();
         for (String line : lines) {
             if (pattern.matcher(line.toLowerCase()).find()) {
                 return line;
@@ -81,8 +79,8 @@ public class StringProvider {
     }
 
     // TODO: Optimiser le code
-    public String getBillNumber() {
-        String line = getPartialString(Dictionary.getBillNumber());
+    public String getBillNumber(String[] lines) {
+        String line = getPartialString(lines, Dictionary.getBillNumber());
         String[] words = line.split(" ", -1);
         String temp;
         for (String word : words) {
@@ -94,10 +92,48 @@ public class StringProvider {
         return "";
     }
 
-    public static void main(String[] args) throws Exception {
-        Ocr ocr = new Ocr();
-        StringProvider stringProvider = new StringProvider(ocr.getCore().generatePlainText("success/modele-facture-freelance.pdf"));
-        stringProvider.setPlainText("facturen°2018-022");
-        System.out.println(stringProvider.getBillNumber());
+    private boolean isDate(String text) {
+        return text.matches("([0-9]{2})-([0-9]{2})-([0-9]{4})")
+                || text.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})")
+                || text.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")
+                || text.matches("([0-9]{4})/([0-9]{2})/([0-9]{2})");
+    }
+
+    public String getDate(String[] lines, String[] dictionaries) {
+        String line = getPartialString(lines, dictionaries);
+        String[] words = line.split(" ", -1);
+        String temp;
+        for (String word : words) {
+            temp = clear(word);
+            if (isDate(temp)) {
+                return temp;
+            }
+        }
+        return "";
+    }
+
+    public String getIssueDate(String[] lines) {
+        return getDate(lines, Dictionary.getIssueDate());
+    }
+
+    public String getDueDate(String[] lines) {
+        return getDate(lines, Dictionary.getDueDate());
+    }
+
+    public String clearDate() {
+        return getPlainText().replace("\\", "");
+    }
+
+    public String getDateFormat() throws Exception {
+        if (getPlainText().matches("([0-9]{2})-([0-9]{2})-([0-9]{4})")) {
+            return "dd-MM-yyyy";
+        } else if (getPlainText().matches("([0-9]{2})/([0-9]{2})/([0-9]{4})")) {
+            return "dd/MM/yyyy";
+        } else if (getPlainText().matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
+            return "yyyy-MM-dd";
+        } else if (getPlainText().matches("([0-9]{4})/([0-9]{2})/([0-9]{2})")) {
+            return "yyyy/MM/dd";
+        }
+        throw new Exception("Format de date non reconnu");
     }
 }
