@@ -5,7 +5,6 @@
  */
 package mg.bici.ocr.config;
 
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
@@ -24,10 +23,10 @@ public class FileConfigurationAccessor implements ConfigurationAccessor {
     @Override
     public void init() {
         properties = new Properties();
-        try (InputStreamReader input = new InputStreamReader(new FileInputStream(PATH), "UTF8")) {
+        try (InputStreamReader input = new InputStreamReader(getClass().getResourceAsStream(PATH), "UTF8")) {
             properties.load(input);
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 
