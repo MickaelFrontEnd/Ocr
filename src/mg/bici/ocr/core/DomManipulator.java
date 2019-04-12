@@ -61,7 +61,7 @@ public class DomManipulator {
     }
 
     public Element getDesignation(Document document) {
-        return getElement(Dictionnary.getDesignation());
+        return getElement(Dictionary.getDesignation());
     }
 
     public Element getTableHeader(Document document) {

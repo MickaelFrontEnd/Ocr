@@ -5,7 +5,11 @@
  */
 package mg.bici.ocr.core;
 
-import mg.bici.ocr.model.Table;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -26,8 +30,40 @@ public class Ocr {
         core = new Core();
     }
 
+    public JSONObject getJSONObject(String path) throws Exception {
+        try {
+            return getCore().constructBill(path).toJSONObject();
+        } catch (Exception ex) {
+            throw new Exception("Impossible de lire la facture");
+        }
+    }
+
     public String getJSON(String path) throws Exception {
-        Table table = core.constructTable(path);
-        return table.toJson();
+        try {
+            return getCore().constructBill(path).toJSON();
+        } catch (Exception ex) {
+            throw new Exception("Impossible de lire la facture");
+        }
+    }
+
+    public String getPlainText(String path) throws Exception {
+        return getCore().generatePlainText(path);
+    }
+
+    // Information générale
+    public Object getHeader(JSONObject json, Class classe, Map<String, String> mapping) throws Exception {
+        return Converter.convert((JSONObject) json.get(Dictionary.HEADER), classe, mapping);
+    }
+
+    // Lignes factures
+    public List<Object> getBody(JSONObject json, Class classe, Map<String, String> mapping) throws Exception {
+        List<Object> result = new ArrayList();
+        JSONArray rows = (JSONArray) json.get(Dictionary.BODY);
+        JSONObject row;
+        for (int i = 0; i < rows.size(); i++) {
+            row = (JSONObject) rows.get(i);
+            result.add(Converter.convert(row, classe, mapping));
+        }
+        return result;
     }
 }

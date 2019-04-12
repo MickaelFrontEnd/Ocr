@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import mg.bici.ocr.exception.GenericException;
+import mg.bici.ocr.model.Bill;
+import mg.bici.ocr.model.GeneralInformation;
 import mg.bici.ocr.model.LocalisableNumber;
 import mg.bici.ocr.model.LocalisableWord;
 import mg.bici.ocr.model.Table;
@@ -28,7 +30,7 @@ import org.jsoup.select.Elements;
 public class Core {
     
     private Tesseract tesseract;
-    private String tessdataPath = "tessdata";
+    private String tessdataPath = "./tessdata";
     private String language = "fra";
     private int pageSegMode = 6;
     private boolean preserveSpace = false;
@@ -116,11 +118,29 @@ public class Core {
         this.tesseract.setPageSegMode(getPageSegMode());
         if(this.isPreserveSpace()) this.tesseract.setTessVariable("preserve_interword_spaces", "true");
     }
+
+    public String generateHtml(File file) throws Exception {
+        this.getTesseract().setHocr(true);
+        return this.getTesseract().doOCR(file);
+    }
     
     public String generateHtml(String path) throws Exception {
         File file = new File(path);
-        this.getTesseract().setHocr(true);
+        return generateHtml(file);
+    }
+
+    public String generatePlainText(File file) throws Exception {
+        this.getTesseract().setHocr(false);
         return this.getTesseract().doOCR(file);
+    }
+
+    public String generatePlainText(String path) throws Exception {
+        File file = new File(path);
+        return generatePlainText(file);
+    }
+
+    public Document generateDocument(File file) throws Exception {
+        return Jsoup.parse(generateHtml(file));
     }
     
     public Document generateDocument(String path) throws Exception {
@@ -155,7 +175,7 @@ public class Core {
 
     private LocalisableWord getDesignation(Element element) throws GenericException {
         DomManipulator domManipulator = new DomManipulator(element);
-        Element designation = domManipulator.getElement(Dictionnary.getDesignation());
+        Element designation = domManipulator.getElement(Dictionary.getDesignation());
         if (designation != null) {
             LocalisableWord result = Converter.convertToLocalisableWord(designation);
             domManipulator.setElement(designation);
@@ -224,10 +244,10 @@ public class Core {
         WordPosition totalPricePosition = pr.getTotalPricePosition();
         WordPosition tvaPosition = pr.getTvaPosition();
         
-        LocalisableWord quantity = new LocalisableWord(Dictionnary.QUANTITY_LABEL,quantityPosition);
-        LocalisableWord unitPrice = new LocalisableWord(Dictionnary.UNIT_PRICE_LABEL,unitPricePosition);
-        LocalisableWord totalPrice = new LocalisableWord(Dictionnary.TOTAL_PRICE_LABEL,totalPricePosition);
-        LocalisableWord tva = new LocalisableWord(Dictionnary.TVA_LABEL, tvaPosition);
+        LocalisableWord quantity = new LocalisableWord(Dictionary.QUANTITY_LABEL, quantityPosition);
+        LocalisableWord unitPrice = new LocalisableWord(Dictionary.UNIT_PRICE_LABEL, unitPricePosition);
+        LocalisableWord totalPrice = new LocalisableWord(Dictionary.TOTAL_PRICE_LABEL, totalPricePosition);
+        LocalisableWord tva = new LocalisableWord(Dictionary.TVA_LABEL, tvaPosition);
         LocalisableWord designation = getDesignation(tableHeader);
         
         return new TableHeader(quantity,designation,unitPrice,totalPrice,tva);
@@ -263,8 +283,39 @@ public class Core {
         return new Table(tableHeader, constructRows(tableHeader, document));
     }
 
+    public Table constructTable(File file) throws Exception {
+        Document document = generateDocument(file);
+        return constructTable(document);
+    }
+
     public Table constructTable(String path) throws Exception {
         Document document = generateDocument(path);
         return constructTable(document);
+    }
+
+    public GeneralInformation getGeneralInformation(File file) throws Exception {
+        StringProvider stringProvider = new StringProvider(generatePlainText(file));
+        String[] lines = stringProvider.splitByLine();
+        return new GeneralInformation(
+                stringProvider.getBillNumber(lines),
+                stringProvider.getIssueDate(lines),
+                stringProvider.getDueDate(lines)
+        );
+    }
+
+    public Bill constructBill(File file) throws Exception {
+        GeneralInformation generalInformation = null;
+        try {
+            generalInformation = getGeneralInformation(file);
+        } catch (Exception ex) {
+
+        }
+        Table table = constructTable(file);
+        return new Bill(generalInformation, table);
+    }
+
+    public Bill constructBill(String path) throws Exception {
+        File file = new File(path);
+        return constructBill(file);
     }
 }
