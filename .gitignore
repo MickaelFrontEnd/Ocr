@@ -17,3 +17,4 @@ tessdata
 
 #pdf file 
 *.pdf
+/dist/

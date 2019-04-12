@@ -30,7 +30,7 @@ import org.jsoup.select.Elements;
 public class Core {
     
     private Tesseract tesseract;
-    private String tessdataPath = "tessdata";
+    private String tessdataPath = "./tessdata";
     private String language = "fra";
     private int pageSegMode = 6;
     private boolean preserveSpace = false;
