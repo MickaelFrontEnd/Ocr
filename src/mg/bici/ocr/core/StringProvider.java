@@ -136,4 +136,15 @@ public class StringProvider {
         }
         throw new Exception("Format de date non reconnu");
     }
+
+    public String removeUnit() {
+        String[] units = Dictionary.getMonetaryUnit();
+        String result = getPlainText();
+        for (String unit : units) {
+            if ((result).contains(unit)) {
+                result = result.replace(unit, "");
+            }
+        }
+        return result;
+    }
 }

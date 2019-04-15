@@ -33,6 +33,7 @@ public class Dictionary {
     public static final String DUE_DATE_LABEL = "date_echeance";
     public static final String HEADER = "en_tete";
     public static final String BODY = "corps";
+    public static final String MONETARY_UNIT_LABEL = "unite";
     
     public static String[] getDesignation() {
         return CONFIG.getDictionary(DESIGNATION_LABEL);
@@ -84,5 +85,9 @@ public class Dictionary {
 
     public static String[] getDueDate() {
         return CONFIG.getDictionary(DUE_DATE_LABEL);
+    }
+
+    public static String[] getMonetaryUnit() {
+        return CONFIG.getDictionary(MONETARY_UNIT_LABEL);
     }
 }
