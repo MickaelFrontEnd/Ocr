@@ -5,6 +5,7 @@
  */
 package mg.bici.ocr.core;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,14 @@ public class Ocr {
 
     public Ocr() {
         core = new Core();
+    }
+
+    public JSONObject getJSONObject(File file) throws Exception {
+        try {
+            return getCore().constructBill(file).toJSONObject();
+        } catch (Exception ex) {
+            throw new Exception("Impossible de lire la facture");
+        }
     }
 
     public JSONObject getJSONObject(String path) throws Exception {
