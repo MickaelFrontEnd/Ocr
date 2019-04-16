@@ -61,18 +61,27 @@ public class Ocr {
 
     // Information générale
     public Object getHeader(JSONObject json, Class classe, Map<String, String> mapping) throws Exception {
-        return Converter.convert((JSONObject) json.get(Dictionary.HEADER), classe, mapping);
+        try {
+            return Converter.convert((JSONObject) json.get(Dictionary.HEADER), classe, mapping);
+        } catch (Exception exception) {
+            throw new Exception("Impossible de lire l'en tête de la facture");
+        }
     }
 
     // Lignes factures
     public List<Object> getBody(JSONObject json, Class classe, Map<String, String> mapping) throws Exception {
-        List<Object> result = new ArrayList();
-        JSONArray rows = (JSONArray) json.get(Dictionary.BODY);
-        JSONObject row;
-        for (int i = 0; i < rows.size(); i++) {
-            row = (JSONObject) rows.get(i);
-            result.add(Converter.convert(row, classe, mapping));
+        try {
+            List<Object> result = new ArrayList();
+            JSONArray rows = (JSONArray) json.get(Dictionary.BODY);
+            JSONObject row;
+            for (int i = 0; i < rows.size(); i++) {
+                row = (JSONObject) rows.get(i);
+                result.add(Converter.convert(row, classe, mapping));
+            }
+            return result;
+        } catch (Exception ex) {
+            throw new Exception("Impossible de lire le corps de la facture");
         }
-        return result;
+
     }
 }

@@ -21,9 +21,10 @@ import org.json.simple.JSONObject;
 public class Main {
     public static void main(String[] args) throws Exception {
         Ocr ocr = new Ocr();
+
         // Exemple en donnant le path du fichier pdf
         // On peut aussi donner un File en tant que entrée
-        JSONObject json = ocr.getJSONObject("success/2.pdf");
+        JSONObject json = ocr.getJSONObject("failed/20.pdf");
 
         // Exemple de mapping entete
         Map<String, String> mappingHeader = new HashMap();
