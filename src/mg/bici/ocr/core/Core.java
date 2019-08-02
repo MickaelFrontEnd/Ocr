@@ -116,7 +116,9 @@ public class Core {
         this.tesseract.setDatapath(getTessdataPath());
         this.tesseract.setLanguage(getLanguage());
         this.tesseract.setPageSegMode(getPageSegMode());
-        if(this.isPreserveSpace()) this.tesseract.setTessVariable("preserve_interword_spaces", "true");
+        if (this.isPreserveSpace()) {
+            this.tesseract.setTessVariable("preserve_interword_spaces", "true");
+        }
     }
 
     public String generateHtml(File file) throws Exception {

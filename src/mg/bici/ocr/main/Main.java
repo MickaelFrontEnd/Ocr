@@ -21,7 +21,8 @@ import org.json.simple.JSONObject;
 public class Main {
     public static void main(String[] args) throws Exception {
         Ocr ocr = new Ocr();
-
+        //System.out.println(ocr.getCore().generateHtml("success/numérisation0002_rotated.pdf"));
+        System.out.println(ocr.getPlainText("success/numérisation0002_rotated.pdf"));
         // Exemple en donnant le path du fichier pdf
         // On peut aussi donner un File en tant que entrée
         JSONObject json = ocr.getJSONObject("failed/20.pdf");
